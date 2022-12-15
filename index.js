@@ -67,4 +67,21 @@ const view_employees = () => {
   });
 };
 
+const add_department = () => {
+  inquirer.prompt(departmentQuestions).then((response) => {
+    db.query(
+      `INSERT INTO department SET ?`,
+      { name: response.department_name },
+      (err, results) => {
+        err
+          ? console.error(err)
+          : console.log(
+              `Department ${response.department_name} added successfully`
+            );
+        runMenuQuestions();
+      }
+    );
+  });
+};
+
 runMenuQuestions();
