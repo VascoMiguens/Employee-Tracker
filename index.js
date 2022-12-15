@@ -8,6 +8,8 @@ const {
   updateEmployeeQuestions,
 } = require("./questions");
 
+
+//Connec to the database
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -15,6 +17,7 @@ const db = mysql.createConnection({
   database: "employee_db",
 });
 
+// Prompt questions
 const runMenuQuestions = async () => {
   await inquirer.prompt(MainMenuQuestions).then((response) => {
     switch (response.option) {
@@ -46,6 +49,7 @@ const runMenuQuestions = async () => {
   });
 };
 
+//View Departments Query
 const view_departments = () => {
   db.query("SELECT * FROM department", (err, results) => {
     err ? console.error(err) : console.table(results);
@@ -53,6 +57,7 @@ const view_departments = () => {
   });
 };
 
+//View Roles Query
 const view_roles = () => {
   db.query("SELECT * FROM role", (err, results) => {
     err ? console.error(err) : console.table(results);
@@ -60,6 +65,7 @@ const view_roles = () => {
   });
 };
 
+//View Employees Query
 const view_employees = () => {
   db.query("SELECT * FROM employee", (err, results) => {
     err ? console.error(err) : console.table(results);
@@ -67,10 +73,14 @@ const view_employees = () => {
   });
 };
 
+// Add a Department
 const add_department = () => {
+  //Prompt add a department questions
   inquirer.prompt(departmentQuestions).then((response) => {
     db.query(
+      // Insert new department
       `INSERT INTO department SET ?`,
+      //Insert into name 
       { name: response.department_name },
       (err, results) => {
         err
@@ -79,6 +89,33 @@ const add_department = () => {
               `Department ${response.department_name} added successfully`
             );
         runMenuQuestions();
+      }
+    );
+  });
+};
+
+const add_role = () => {
+  db.query("SELECT * FROM department", (err, results) => {
+    const departmentChoices = roleQuestions[2];
+    results.forEach((department) => {
+      departmentChoices.choices.push({
+        value: department.id,
+        name: department.name,
+      });
+    });
+  });
+  inquirer.prompt(roleQuestions).then((response) => {
+    db.query(
+      `INSERT INTO role SET ?`,
+      {
+        title: response.role_name,
+        salary: response.role_salary,
+        department_id: response.department_id,
+      },
+      (err, results) => {
+        err
+          ? console.error(err)
+          : console.log(`Role ${response.title} added successfully`);
       }
     );
   });
