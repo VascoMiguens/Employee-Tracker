@@ -11,7 +11,7 @@ const {
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "cmonin123!",
   database: "employee_db",
 });
 
@@ -49,6 +49,21 @@ const runMenuQuestions = async () => {
 const view_departments = () => {
   db.query("SELECT * FROM department", (err, results) => {
     err ? console.error(err) : console.table(results);
+    runMenuQuestions();
+  });
+};
+
+const view_roles = () => {
+  db.query("SELECT * FROM role", (err, results) => {
+    err ? console.error(err) : console.table(results);
+    runMenuQuestions();
+  });
+};
+
+const view_employees = () => {
+  db.query("SELECT * FROM employee", (err, results) => {
+    err ? console.error(err) : console.table(results);
+    runMenuQuestions();
   });
 };
 
