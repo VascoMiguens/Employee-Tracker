@@ -126,7 +126,7 @@ const updateEmployeeQuestions = [
   },
 ];
 
-modular.exports = {
+module.exports = {
   MainMenuQuestions,
   departmentQuestions,
   roleQuestions,
