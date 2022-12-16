@@ -104,7 +104,7 @@ const employeeQuestions = [
     choices: [],
   },
   {
-    type: "input",
+    type: "list",
     name: "manager_id",
     message: "Who is the Employee's Manager?",
     choices: [],
