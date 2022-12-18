@@ -5,7 +5,7 @@ const {
   departmentQuestions,
   roleQuestions,
   employeeQuestions,
-  updateEmployeeQuestions,
+  updateEmployeeRoleQuestions,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 
@@ -155,7 +155,7 @@ const add_employee = () => {
 
 const update_employee_role = () => {
   db.get_employees().then((results) => {
-    const employeeQuestions = updateEmployeeQuestions[0];
+    const employeeQuestions = updateEmployeeRoleQuestions[0];
     results.forEach((employee) => {
       employeeQuestions.choices.push({
         value: employee.id,
@@ -163,14 +163,14 @@ const update_employee_role = () => {
       });
     });
     db.get_roles().then((results) => {
-      const roleQuestion = updateEmployeeQuestions[1];
+      const roleQuestion = updateEmployeeRoleQuestions[1];
       results.forEach((role) => {
         roleQuestion.choices.push({
           value: role.id,
           name: role.title,
         });
       });
-      inquirer.prompt(updateEmployeeQuestions).then((response) => {
+      inquirer.prompt(updateEmployeeRoleQuestions).then((response) => {
         db.update_employe_role_query(response).then((results) => {
           console.log("\n", results, "\n");
           runMenuQuestions();

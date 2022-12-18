@@ -50,6 +50,10 @@ const MainMenuQuestions = [
         value: "update_employee_role",
         name: "Update an Employee's Role",
       },
+      {
+        value: "update_employee_manager",
+        name: "Update an Employee's Manager",
+      },
     ],
   },
 ];
@@ -111,7 +115,7 @@ const employeeQuestions = [
   },
 ];
 
-const updateEmployeeQuestions = [
+const updateEmployeeRoleQuestions = [
   {
     type: "list",
     name: "employee_id",
@@ -121,7 +125,22 @@ const updateEmployeeQuestions = [
   {
     type: "list",
     name: "role_id",
-    message: "Which Role do you want to assign the selected Employee?",
+    message: "Which Role do you want to assign to the selected Employee?",
+    choices: [],
+  },
+];
+
+const updateEmployeeManagerQuestions = [
+  {
+    tpye: "list",
+    name: "employee_id",
+    message: "Which Employee's Manager do you want to Update?",
+    choices: [],
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    nessage: "Which Manager do you want to assign to the selected Employee?",
     choices: [],
   },
 ];
@@ -131,5 +150,6 @@ module.exports = {
   departmentQuestions,
   roleQuestions,
   employeeQuestions,
-  updateEmployeeQuestions,
+  updateEmployeeRoleQuestions,
+  updateEmployeeManagerQuestions,
 };
