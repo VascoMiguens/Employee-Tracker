@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 
-class inititateDB {
+class DB {
   constructor(options) {
     this.options = options;
     this.db = null;
@@ -35,4 +35,4 @@ class inititateDB {
   }
 }
 
-module.exports = inititateDB;
+module.exports = DB;

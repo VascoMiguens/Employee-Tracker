@@ -153,6 +153,31 @@ const add_employee = () => {
   });
 };
 
-const update_employee_role = () => {};
+const update_employee_role = () => {
+  db.get_employees().then((results) => {
+    const employeeQuestions = updateEmployeeQuestions[0];
+    results.forEach((employee) => {
+      employeeQuestions.choices.push({
+        value: employee.id,
+        name: employee.name,
+      });
+    });
+    db.get_roles().then((results) => {
+      const roleQuestion = updateEmployeeQuestions[1];
+      results.forEach((role) => {
+        roleQuestion.choices.push({
+          value: role.id,
+          name: role.title,
+        });
+      });
+      inquirer.prompt(updateEmployeeQuestions).then((response) => {
+        db.update_employe_role_query(response).then((results) => {
+          console.log("\n", results, "\n");
+          runMenuQuestions();
+        });
+      });
+    });
+  });
+};
 
 runMenuQuestions();

@@ -1,6 +1,6 @@
-const inititateDB = require("./initiateDB.js");
+const DB = require("./DB.js");
 
-class employeeDB extends inititateDB {
+class employeeDB extends DB {
   constructor(options) {
     super(options);
   }
@@ -128,6 +128,21 @@ class employeeDB extends inititateDB {
           resolve(
             `${employee.first_name} ${employee.last_name} added successfully`
           );
+        }
+      );
+    });
+  }
+
+  update_employe_role_query(employee) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        "UPDATE employee SET role_id=? WHERE id=?",
+        [employee.role_id, employee.employee_id],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
         }
       );
     });
