@@ -8,9 +8,9 @@ class inititateDB {
 
   //Validation of users database configuration
   validate() {
-    const { host, user, password, databse } = this.options;
-    if (!host || !user || !password || !databse)
-      throw new Error("Your database configuration is not correct!");
+    const { host, user, password, database } = this.options;
+    if (!host || !user || !password || !database)
+      throw new Error("Database configuration is invalid");
 
     return;
   }
@@ -20,7 +20,7 @@ class inititateDB {
     this.validate();
 
     //Destructure users database configuration
-    const { host, user, password, databse } = this.options;
+    const { host, user, password, database } = this.options;
 
     //Connect to database
     this.db = mysql.createConnection(

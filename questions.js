@@ -47,7 +47,7 @@ const MainMenuQuestions = [
         name: "Add a Role",
       },
       {
-        value: "update_role",
+        value: "update_employee_role",
         name: "Update an Employee's Role",
       },
     ],
@@ -98,13 +98,13 @@ const employeeQuestions = [
     validate: (answer) => confirmLettersOnly(answer),
   },
   {
-    type: "list",
+    type: "rawlist",
     name: "role_id",
     message: "What is the Employee's Role?",
     choices: [],
   },
   {
-    type: "list",
+    type: "rawlist",
     name: "manager_id",
     message: "Who is the Employee's Manager?",
     choices: [],
