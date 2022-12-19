@@ -15,7 +15,6 @@ const {
   updateRoleSalary,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
-const { response } = require("express");
 
 //Connect to the database
 const db = new employeeDB({
