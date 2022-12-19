@@ -340,8 +340,7 @@ const delete_role = () => {
     //run delete role questions and delete the role
     inquirer.prompt(deleteRole).then((answer) => {
       db.delete_role_query(answer).then((results) => {
-        console.log("\n", results, "\n");
-        console.log("Role deleted successfully");
+        console.log(`Role ${roleTitle} deleted successfully`);
         //call menu questions
         runMenuQuestions();
       });
@@ -365,7 +364,6 @@ const delete_employee = () => {
     //run delete role questions and delete the role
     inquirer.prompt(deleteEmployee).then((answer) => {
       db.delete_employee_query(answer).then((results) => {
-        console.log("\n", results, "\n");
         console.log(`Employee ${employeeDetails} deleted successfully`);
         //call menu questions
         runMenuQuestions();
@@ -402,15 +400,17 @@ const update_role_salary = () => {
   db.get_roles().then((results) => {
     const roleSalaryQuestion = updateRoleSalary[0];
     //add all roles to update role salary question
+    let roleTitle;
     results.forEach((role) => {
+      roleTitle = role.title;
       roleSalaryQuestion.choices.push({
         value: role.id,
-        name: role.title,
+        name: roleTitle,
       });
     });
     inquirer.prompt(updateRoleSalary).then((answer) => {
       db.update_role_salary_query(answer).then((results) => {
-        console.log("\n", results, "\n");
+        console.log(`${roleTitle} salary updated successfully`);
       });
     });
   });

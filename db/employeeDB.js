@@ -18,12 +18,21 @@ class employeeDB extends DB {
 
   get_roles() {
     return new Promise((resolve, reject) => {
-      return this.db.query("SELECT * FROM role", (err, results) => {
-        if (err) {
-          reject(err);
+      return this.db.query(
+        `SELECT
+         role.id,
+         role.title as title,
+         department.name as department,
+         role.salary as salary
+         FROM role
+         INNER JOIN department on role.department_id = department.id`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
         }
-        resolve(results);
-      });
+      );
     });
   }
   //------ Get all employees Query -----//
