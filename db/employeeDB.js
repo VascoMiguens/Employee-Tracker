@@ -147,6 +147,21 @@ class employeeDB extends DB {
       );
     });
   }
+
+  update_employee_manager_query(employee) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `UPDATE employee SET manager_id=? WHERE id=?`,
+        [employee.manager_id, employee.employee_id],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
 }
 
 module.exports = employeeDB;

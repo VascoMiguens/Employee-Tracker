@@ -132,7 +132,7 @@ const updateEmployeeRoleQuestions = [
 
 const updateEmployeeManagerQuestions = [
   {
-    tpye: "list",
+    type: "list",
     name: "employee_id",
     message: "Which Employee's Manager do you want to Update?",
     choices: [],
@@ -140,7 +140,7 @@ const updateEmployeeManagerQuestions = [
   {
     type: "list",
     name: "manager_id",
-    nessage: "Which Manager do you want to assign to the selected Employee?",
+    message: "Which Manager do you want to assign to the selected Employee?",
     choices: [],
   },
 ];

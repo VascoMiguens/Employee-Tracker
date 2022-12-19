@@ -6,8 +6,10 @@ const {
   roleQuestions,
   employeeQuestions,
   updateEmployeeRoleQuestions,
+  updateEmployeeManagerQuestions,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
+const { response } = require("express");
 
 //Connect to the database
 const db = new employeeDB({
@@ -19,7 +21,7 @@ const db = new employeeDB({
 
 db.connect();
 
-// Prompt questions
+//------Prompt questions------//
 const runMenuQuestions = async () => {
   await inquirer.prompt(MainMenuQuestions).then((response) => {
     switch (response.option) {
@@ -44,6 +46,9 @@ const runMenuQuestions = async () => {
       case "update_employee_role":
         update_employee_role();
         break;
+      case "update_employee_manager":
+        update_employee_manager();
+        break;
       default:
         console.log("default");
         break;
@@ -51,7 +56,7 @@ const runMenuQuestions = async () => {
   });
 };
 
-//View Departments Query
+//------View Departments Query------//
 const view_departments = () => {
   db.get_departments().then((results) => {
     //show results in a table
@@ -61,7 +66,7 @@ const view_departments = () => {
   });
 };
 
-//View Roles Query
+//------View Roles Query-----//
 const view_roles = () => {
   db.get_roles().then((results) => {
     //show results in a table
@@ -71,7 +76,7 @@ const view_roles = () => {
   });
 };
 
-//View Employees Query
+//------View Employees Query------//
 const view_employees = () => {
   db.get_employees().then((results) => {
     console.table(results);
@@ -80,7 +85,7 @@ const view_employees = () => {
   });
 };
 
-// Add a Department
+//-----Add a Department-----//
 const add_department = () => {
   //Prompt add a department questions
   inquirer.prompt(departmentQuestions).then((response) => {
@@ -91,7 +96,7 @@ const add_department = () => {
     });
   });
 };
-// Add a Role
+//-----Add a Role-----//
 const add_role = () => {
   //Get all departments and push them into roleQuestions choices
   db.get_departments().then((results) => {
@@ -113,6 +118,7 @@ const add_role = () => {
   });
 };
 
+//----Add a employee----//
 const add_employee = () => {
   // get all details from role and push them into "role" question in employeeQuestions
   db.get_roles().then((results) => {
@@ -153,15 +159,18 @@ const add_employee = () => {
   });
 };
 
+//Update an employee's role
 const update_employee_role = () => {
+  // get all  employees and add them into employee question
   db.get_employees().then((results) => {
-    const employeeQuestions = updateEmployeeRoleQuestions[0];
+    const employeeQuestion = updateEmployeeRoleQuestions[0];
     results.forEach((employee) => {
-      employeeQuestions.choices.push({
+      employeeQuestion.choices.push({
         value: employee.id,
         name: employee.name,
       });
     });
+    //get all roles and add them into role question
     db.get_roles().then((results) => {
       const roleQuestion = updateEmployeeRoleQuestions[1];
       results.forEach((role) => {
@@ -170,11 +179,47 @@ const update_employee_role = () => {
           name: role.title,
         });
       });
+      //run update employee role questions and update the role
       inquirer.prompt(updateEmployeeRoleQuestions).then((response) => {
         db.update_employe_role_query(response).then((results) => {
           console.log("\n", results, "\n");
+          //call menu questions
           runMenuQuestions();
         });
+      });
+    });
+  });
+};
+
+const update_employee_manager = () => {
+  // get all  employees
+  db.get_employees().then((results) => {
+    const employeeQuestion = updateEmployeeManagerQuestions[0];
+    const managerQuestion = updateEmployeeManagerQuestions[1];
+    let employeeDetails;
+    //add all employees to the employee and manager questions
+    results.forEach((employee) => {
+      employeeDetails = `${employee.name} (${employee.title})`;
+      employeeQuestion.choices.push({
+        name: employeeDetails,
+        value: employee.id,
+      });
+      managerQuestion.choices.push({
+        name: employeeDetails,
+        value: employee.id,
+      });
+    });
+    //add a null choice to manager question
+    managerQuestion.choices.push({
+      name: "None",
+      value: null,
+    });
+    //run update employee manager questions and update the manager
+    inquirer.prompt(updateEmployeeManagerQuestions).then((answer) => {
+      db.update_employee_manager_query(answer).then((results) => {
+        console.log(`${employeeDetails} manager was updated!`);
+        //call menu questions
+        runMenuQuestions();
       });
     });
   });
