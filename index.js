@@ -7,6 +7,7 @@ const {
   employeeQuestions,
   updateEmployeeRoleQuestions,
   updateEmployeeManagerQuestions,
+  employeebyManager,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -48,6 +49,9 @@ const runMenuQuestions = async () => {
         break;
       case "update_employee_manager":
         update_employee_manager();
+        break;
+      case "view_employee_manager":
+        view_employees_manager();
         break;
       default:
         console.log("default");
@@ -201,12 +205,12 @@ const update_employee_manager = () => {
     results.forEach((employee) => {
       employeeDetails = `${employee.name} (${employee.title})`;
       employeeQuestion.choices.push({
-        name: employeeDetails,
         value: employee.id,
+        name: employeeDetails,
       });
       managerQuestion.choices.push({
-        name: employeeDetails,
         value: employee.id,
+        name: employeeDetails,
       });
     });
     //add a null choice to manager question
@@ -218,6 +222,26 @@ const update_employee_manager = () => {
     inquirer.prompt(updateEmployeeManagerQuestions).then((answer) => {
       db.update_employee_manager_query(answer).then((results) => {
         console.log(`${employeeDetails} manager was updated!`);
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+
+const view_employees_manager = () => {
+  db.get_manager().then((results) => {
+    const managerQuestion = employeebyManager[0];
+    results.forEach((manager) => {
+      const employeeDetails = `${manager.name} (${manager.department})`;
+      managerQuestion.choices.push({
+        value: manager.id,
+        name: employeeDetails,
+      });
+    });
+    inquirer.prompt(employeebyManager).then((answer) => {
+      db.get_employee_by_manager(answer).then((results) => {
+        console.table(results);
         //call menu questions
         runMenuQuestions();
       });
