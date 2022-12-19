@@ -228,6 +228,7 @@ class employeeDB extends DB {
   }
 
   delete_role_query(role) {
+    console.log(role);
     return new Promise((resolve, reject) => {
       this.db.query(
         `DELETE from role WHERE id = ${role.role_id}`,
@@ -245,6 +246,27 @@ class employeeDB extends DB {
     return new Promise((resolve, reject) => {
       this.db.query(
         `DELETE from employee WHERE id = ${employee.employee_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  department_budget_query(department) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `
+        SELECT 
+        department.name as Department,
+        SUM(salary) as Budget 
+        FROM employee 
+        INNER JOIN role on employee.role_id = role.id 
+        LEFT JOIN department on role.department_id = department.id
+        WHERE department_id = ${department.department_id}`,
         (err, results) => {
           if (err) {
             reject(err);

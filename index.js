@@ -12,6 +12,7 @@ const {
   deleteDepartment,
   deleteRole,
   deleteEmployee,
+  departmentBudget,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -68,6 +69,9 @@ const runMenuQuestions = async () => {
         break;
       case "delete_employee":
         delete_employee();
+        break;
+      case "department_budget":
+        department_budget();
         break;
       default:
         console.log("default");
@@ -333,7 +337,7 @@ const delete_role = () => {
     });
   });
 };
-
+//-----Delete Employee-----//
 const delete_employee = () => {
   db.get_employees().then((results) => {
     // get all roles
@@ -350,6 +354,31 @@ const delete_employee = () => {
     inquirer.prompt(deleteEmployee).then((answer) => {
       db.delete_employee_query(answer).then((results) => {
         console.log("\n", results, "\n");
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+
+//------Total Budget of a Department-------//
+const department_budget = () => {
+  //get all departments
+  db.get_departments().then((results) => {
+    const departmentBudgetQuestion = departmentBudget[0];
+    //add all departments to department budget question
+    results.forEach((department) => {
+      console.log(department);
+      console.log(results);
+      departmentBudgetQuestion.choices.push({
+        value: department.id,
+        name: department.name,
+      });
+    });
+    //run department budget questions and sum all the salaries in that department
+    inquirer.prompt(departmentBudget).then((answer) => {
+      db.department_budget_query(answer).then((results) => {
+        console.table(results);
         //call menu questions
         runMenuQuestions();
       });
