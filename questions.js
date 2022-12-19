@@ -58,6 +58,10 @@ const MainMenuQuestions = [
         value: "view_employee_manager",
         name: "View Employee's by Manager",
       },
+      {
+        value: "view_employee_department",
+        name: "View Employee's by Department",
+      },
     ],
   },
 ];
@@ -153,7 +157,16 @@ const employeebyManager = [
   {
     type: "list",
     name: "employee_id",
-    message: "Which Employee's Manager do you want to Update?",
+    message: "Which Manager's Employee's would you like to see?",
+    choices: [],
+  },
+];
+
+const employeebyDepartment = [
+  {
+    type: "list",
+    name: "department_id",
+    message: "Which Department's Employee's would you like to see?",
     choices: [],
   },
 ];
@@ -166,4 +179,5 @@ module.exports = {
   updateEmployeeRoleQuestions,
   updateEmployeeManagerQuestions,
   employeebyManager,
+  employeebyDepartment,
 };

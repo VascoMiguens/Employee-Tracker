@@ -8,6 +8,7 @@ const {
   updateEmployeeRoleQuestions,
   updateEmployeeManagerQuestions,
   employeebyManager,
+  employeebyDepartment,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -52,6 +53,9 @@ const runMenuQuestions = async () => {
         break;
       case "view_employee_manager":
         view_employees_manager();
+        break;
+      case "view_employee_department":
+        view_employee_department();
         break;
       default:
         console.log("default");
@@ -241,6 +245,25 @@ const view_employees_manager = () => {
     });
     inquirer.prompt(employeebyManager).then((answer) => {
       db.get_employee_by_manager(answer).then((results) => {
+        console.table(results);
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+
+const view_employee_department = () => {
+  db.get_departments().then((results) => {
+    const departmentQuestion = employeebyDepartment[0];
+    results.forEach((department) => {
+      departmentQuestion.choices.push({
+        value: department.id,
+        name: department.name,
+      });
+    });
+    inquirer.prompt(employeebyDepartment).then((answer) => {
+      db.get_employee_by_department(answer).then((results) => {
         console.table(results);
         //call menu questions
         runMenuQuestions();

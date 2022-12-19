@@ -36,7 +36,7 @@ class employeeDB extends DB {
         CONCAT(employee.first_name,' ',employee.last_name) as name,
         role.title as title, 
         department.name as department, 
-        role.salary, 
+        role.salary as salary, 
         CONCAT(manager.first_name, ' ', manager.last_name) as Manager 
         FROM employee LEFT JOIN role on employee.role_id = role.id 
         LEFT JOIN department on role.department_id = department.id 
@@ -89,7 +89,7 @@ class employeeDB extends DB {
       );
     });
   }
-//-----Create new Role-----//
+  //-----Create new Role-----//
   insert_role(role) {
     // save user's inserted values into a variable
     const newRole = {
@@ -167,7 +167,6 @@ class employeeDB extends DB {
   }
   //------Get employee by manager-----//
   get_employee_by_manager(employee) {
-    console.log(employee);
     return new Promise((resolve, reject) => {
       this.db.query(
         `SELECT
@@ -179,6 +178,30 @@ class employeeDB extends DB {
         INNER JOIN role on employee.role_id = role.id 
         INNER JOIN employee as manager on manager.id = employee.manager_id
         WHERE manager.id = ${employee.employee_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  //------Get employee by Department-----//
+  get_employee_by_department(department) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `SELECT
+        employee.id, 
+        CONCAT(employee.first_name,' ',employee.last_name) as name,
+        role.title as title,
+        role.salary as salary,
+        department.name as department 
+        FROM employee 
+        INNER JOIN role on employee.role_id = role.id 
+        LEFT JOIN department on role.department_id = department.id
+        WHERE department.id = ${department.department_id}`,
         (err, results) => {
           if (err) {
             reject(err);
