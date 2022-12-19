@@ -70,6 +70,10 @@ const MainMenuQuestions = [
         value: "delete_role",
         name: "DELETE Role",
       },
+      {
+        value: "delete_employee",
+        name: "DELETE Employee",
+      },
     ],
   },
 ];
@@ -197,6 +201,15 @@ const deleteRole = [
   },
 ];
 
+const deleteEmployee = [
+  {
+    type: "list",
+    name: "employee_id",
+    message: "Which Employee would you like to DELETE?",
+    choices: [],
+  },
+];
+
 module.exports = {
   MainMenuQuestions,
   departmentQuestions,
@@ -208,4 +221,5 @@ module.exports = {
   employeebyDepartment,
   deleteDepartment,
   deleteRole,
+  deleteEmployee,
 };

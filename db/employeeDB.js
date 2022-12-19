@@ -228,10 +228,23 @@ class employeeDB extends DB {
   }
 
   delete_role_query(role) {
-    console.log(role);
     return new Promise((resolve, reject) => {
       this.db.query(
         `DELETE from role WHERE id = ${role.role_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
+
+  delete_employee_query(employee) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `DELETE from employee WHERE id = ${employee.employee_id}`,
         (err, results) => {
           if (err) {
             reject(err);

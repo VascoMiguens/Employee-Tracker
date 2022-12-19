@@ -11,6 +11,7 @@ const {
   employeebyDepartment,
   deleteDepartment,
   deleteRole,
+  deleteEmployee,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -64,6 +65,9 @@ const runMenuQuestions = async () => {
         break;
       case "delete_role":
         delete_role();
+        break;
+      case "delete_employee":
+        delete_employee();
         break;
       default:
         console.log("default");
@@ -322,6 +326,29 @@ const delete_role = () => {
     //run delete role questions and delete the role
     inquirer.prompt(deleteRole).then((answer) => {
       db.delete_role_query(answer).then((results) => {
+        console.log("\n", results, "\n");
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+
+const delete_employee = () => {
+  db.get_employees().then((results) => {
+    // get all roles
+    const deleteEmployeeQuestion = deleteEmployee[0];
+    //add all roles to the roles question
+    results.forEach((employee) => {
+      const employeeDetails = `${employee.name} (${employee.title})`;
+      deleteEmployeeQuestion.choices.push({
+        value: employee.id,
+        name: employeeDetails,
+      });
+    });
+    //run delete role questions and delete the role
+    inquirer.prompt(deleteEmployee).then((answer) => {
+      db.delete_employee_query(answer).then((results) => {
         console.log("\n", results, "\n");
         //call menu questions
         runMenuQuestions();
