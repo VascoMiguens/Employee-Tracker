@@ -78,6 +78,10 @@ const MainMenuQuestions = [
         value: "department_budget",
         name: "Department budget",
       },
+      {
+        value: "update_role_salary",
+        name: "Update Role Salary",
+      },
     ],
   },
 ];
@@ -126,13 +130,13 @@ const employeeQuestions = [
     validate: (answer) => confirmLettersOnly(answer),
   },
   {
-    type: "rawlist",
+    type: "list",
     name: "role_id",
     message: "What is the Employee's Role?",
     choices: [],
   },
   {
-    type: "rawlist",
+    type: "list",
     name: "manager_id",
     message: "Who is the Employee's Manager?",
     choices: [],
@@ -223,6 +227,20 @@ const departmentBudget = [
   },
 ];
 
+const updateRoleSalary = [
+  {
+    type: "list",
+    name: "role_id",
+    message: "Select the Role: ",
+    choices: [],
+  },
+  {
+    type: "input",
+    name: "role_salary",
+    message: "What is the new salary?",
+  },
+];
+
 module.exports = {
   MainMenuQuestions,
   departmentQuestions,
@@ -236,4 +254,5 @@ module.exports = {
   deleteRole,
   deleteEmployee,
   departmentBudget,
+  updateRoleSalary,
 };

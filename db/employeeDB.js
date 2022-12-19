@@ -4,7 +4,7 @@ class employeeDB extends DB {
   constructor(options) {
     super(options);
   }
-  //-----Get all Departments-----//
+  //-----Get all Departments Query-----//
   get_departments() {
     return new Promise((resolve, reject) => {
       this.db.query("SELECT * FROM department", (err, results) => {
@@ -26,7 +26,7 @@ class employeeDB extends DB {
       });
     });
   }
-  //------ Get all employees -----//
+  //------ Get all employees Query -----//
   get_employees() {
     return new Promise((resolve, reject) => {
       // Select id, name, title, department, salary and manager
@@ -50,7 +50,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //-----Get only managers-----//
+  //-----Get only managers Query-----//
   get_manager() {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -70,7 +70,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //-----Create new Department-----//
+  //-----Create new Department Query-----//
   insert_department(department) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -89,7 +89,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //-----Create new Role-----//
+  //-----Create new Role Query-----//
   insert_role(role) {
     // save user's inserted values into a variable
     const newRole = {
@@ -109,7 +109,7 @@ class employeeDB extends DB {
     });
   }
 
-  //-----Create new employee-----//
+  //-----Create new employee Query-----//
   insert_employee(employee) {
     // save user's inserted values into a variable
     const newEmployee = {
@@ -135,7 +135,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //-----Update employee role-----//
+  //-----Update employee role Query-----//
   update_employe_role_query(employee) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -150,7 +150,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //-----Update employee Manager-----//
+  //-----Update employee Manager Query-----//
   update_employee_manager_query(employee) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -165,7 +165,7 @@ class employeeDB extends DB {
       );
     });
   }
-  //------Get employee by manager-----//
+  //------Get employee by manager Query-----//
   get_employee_by_manager(employee) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -188,7 +188,7 @@ class employeeDB extends DB {
     });
   }
 
-  //------Get employee by Department-----//
+  //------Get employee by Department Query-----//
   get_employee_by_department(department) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -211,7 +211,7 @@ class employeeDB extends DB {
       );
     });
   }
-
+  //-----Delete Department Query-----//
   delete_department_query(department) {
     console.log(department);
     return new Promise((resolve, reject) => {
@@ -226,7 +226,7 @@ class employeeDB extends DB {
       );
     });
   }
-
+  //----- Delete Role Query ----//
   delete_role_query(role) {
     console.log(role);
     return new Promise((resolve, reject) => {
@@ -241,7 +241,7 @@ class employeeDB extends DB {
       );
     });
   }
-
+  //----- Delete Employee Query -----//
   delete_employee_query(employee) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -255,7 +255,7 @@ class employeeDB extends DB {
       );
     });
   }
-
+  //------ Department Budget-----//
   department_budget_query(department) {
     return new Promise((resolve, reject) => {
       this.db.query(
@@ -267,6 +267,21 @@ class employeeDB extends DB {
         INNER JOIN role on employee.role_id = role.id 
         LEFT JOIN department on role.department_id = department.id
         WHERE department_id = ${department.department_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
+  //----- Update Role Salary Query-----//
+  update_role_salary_query(role) {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `UPDATE role SET salary=? WHERE id=?`,
+        [role.role_salary, role.role_id],
         (err, results) => {
           if (err) {
             reject(err);

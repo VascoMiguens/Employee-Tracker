@@ -1,5 +1,4 @@
 const inquirer = require("inquirer");
-const mysql = require("mysql2");
 const {
   MainMenuQuestions,
   departmentQuestions,
@@ -13,6 +12,7 @@ const {
   deleteRole,
   deleteEmployee,
   departmentBudget,
+  updateRoleSalary,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -72,6 +72,9 @@ const runMenuQuestions = async () => {
         break;
       case "department_budget":
         department_budget();
+        break;
+      case "update_role_salary":
+        update_role_salary();
         break;
       default:
         console.log("default");
@@ -188,10 +191,12 @@ const update_employee_role = () => {
   // get all  employees and add them into employee question
   db.get_employees().then((results) => {
     const employeeQuestion = updateEmployeeRoleQuestions[0];
+    let employeeName;
     results.forEach((employee) => {
+      employeeName = employee.name;
       employeeQuestion.choices.push({
         value: employee.id,
-        name: employee.name,
+        name: employeeName,
       });
     });
     //get all roles and add them into role question
@@ -207,6 +212,7 @@ const update_employee_role = () => {
       inquirer.prompt(updateEmployeeRoleQuestions).then((response) => {
         db.update_employe_role_query(response).then((results) => {
           console.log("\n", results, "\n");
+          console.log(`${employeeName} role updated successfully`);
           //call menu questions
           runMenuQuestions();
         });
@@ -298,17 +304,20 @@ const delete_department = () => {
   // get all departments
   db.get_departments().then((results) => {
     const deleteDepartmentQuestion = deleteDepartment[0];
+    let departmentName;
     //add all departments to the department question
     results.forEach((department) => {
+      departmentName = department.name;
       deleteDepartmentQuestion.choices.push({
         value: department.id,
-        name: department.name,
+        name: departmentName,
       });
     });
     //run delete department questions and delete the department
     inquirer.prompt(deleteDepartment).then((answer) => {
       db.delete_department_query(answer).then((results) => {
         console.log("\n", results, "\n");
+        console.log(`${departmentName} Department deleted successfully`);
         //call menu questions
         runMenuQuestions();
       });
@@ -320,17 +329,20 @@ const delete_role = () => {
   db.get_roles().then((results) => {
     // get all roles
     const deleteRoleQuestion = deleteRole[0];
+    let roleTitle;
     //add all roles to the roles question
     results.forEach((role) => {
+      roleTitle = role.title;
       deleteRoleQuestion.choices.push({
         value: role.id,
-        name: role.title,
+        name: roleTitle,
       });
     });
     //run delete role questions and delete the role
     inquirer.prompt(deleteRole).then((answer) => {
       db.delete_role_query(answer).then((results) => {
         console.log("\n", results, "\n");
+        console.log("Role deleted successfully");
         //call menu questions
         runMenuQuestions();
       });
@@ -342,9 +354,10 @@ const delete_employee = () => {
   db.get_employees().then((results) => {
     // get all roles
     const deleteEmployeeQuestion = deleteEmployee[0];
+    let employeeDetails;
     //add all roles to the roles question
     results.forEach((employee) => {
-      const employeeDetails = `${employee.name} (${employee.title})`;
+      employeeDetails = `${employee.name} (${employee.title})`;
       deleteEmployeeQuestion.choices.push({
         value: employee.id,
         name: employeeDetails,
@@ -354,6 +367,7 @@ const delete_employee = () => {
     inquirer.prompt(deleteEmployee).then((answer) => {
       db.delete_employee_query(answer).then((results) => {
         console.log("\n", results, "\n");
+        console.log(`Employee ${employeeDetails} deleted successfully`);
         //call menu questions
         runMenuQuestions();
       });
@@ -368,8 +382,6 @@ const department_budget = () => {
     const departmentBudgetQuestion = departmentBudget[0];
     //add all departments to department budget question
     results.forEach((department) => {
-      console.log(department);
-      console.log(results);
       departmentBudgetQuestion.choices.push({
         value: department.id,
         name: department.name,
@@ -381,6 +393,25 @@ const department_budget = () => {
         console.table(results);
         //call menu questions
         runMenuQuestions();
+      });
+    });
+  });
+};
+// -----Update Role Salary -----//
+const update_role_salary = () => {
+  //get all roles
+  db.get_roles().then((results) => {
+    const roleSalaryQuestion = updateRoleSalary[0];
+    //add all roles to update role salary question
+    results.forEach((role) => {
+      roleSalaryQuestion.choices.push({
+        value: role.id,
+        name: role.title,
+      });
+    });
+    inquirer.prompt(updateRoleSalary).then((answer) => {
+      db.update_role_salary_query(answer).then((results) => {
+        console.log("\n", results, "\n");
       });
     });
   });
