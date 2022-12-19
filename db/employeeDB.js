@@ -226,6 +226,21 @@ class employeeDB extends DB {
       );
     });
   }
+
+  delete_role_query(role) {
+    console.log(role);
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `DELETE from role WHERE id = ${role.role_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
 }
 
 module.exports = employeeDB;

@@ -10,6 +10,7 @@ const {
   employeebyManager,
   employeebyDepartment,
   deleteDepartment,
+  deleteRole,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -60,6 +61,9 @@ const runMenuQuestions = async () => {
         break;
       case "delete_department":
         delete_department();
+        break;
+      case "delete_role":
+        delete_role();
         break;
       default:
         console.log("default");
@@ -238,8 +242,10 @@ const update_employee_manager = () => {
 };
 
 const view_employees_manager = () => {
+  // get all  managers
   db.get_manager().then((results) => {
     const managerQuestion = employeebyManager[0];
+    //add all managers to the manager question
     results.forEach((manager) => {
       const employeeDetails = `${manager.name} (${manager.department})`;
       managerQuestion.choices.push({
@@ -247,6 +253,7 @@ const view_employees_manager = () => {
         name: employeeDetails,
       });
     });
+    //run employee manager questions and show all the employees by manager
     inquirer.prompt(employeebyManager).then((answer) => {
       db.get_employee_by_manager(answer).then((results) => {
         console.table(results);
@@ -258,14 +265,17 @@ const view_employees_manager = () => {
 };
 
 const view_employee_department = () => {
+  // get all departments
   db.get_departments().then((results) => {
     const departmentQuestion = employeebyDepartment[0];
+    //add all departments to the department question
     results.forEach((department) => {
       departmentQuestion.choices.push({
         value: department.id,
         name: department.name,
       });
     });
+    //run employee by department questions and show all the department employees
     inquirer.prompt(employeebyDepartment).then((answer) => {
       db.get_employee_by_department(answer).then((results) => {
         console.table(results);
@@ -277,16 +287,41 @@ const view_employee_department = () => {
 };
 //-----Delete Department ------//
 const delete_department = () => {
+  // get all departments
   db.get_departments().then((results) => {
-    const deleteDepartmentQuestions = deleteDepartment[0];
+    const deleteDepartmentQuestion = deleteDepartment[0];
+    //add all departments to the department question
     results.forEach((department) => {
-      deleteDepartmentQuestions.choices.push({
+      deleteDepartmentQuestion.choices.push({
         value: department.id,
         name: department.name,
       });
     });
+    //run delete department questions and delete the department
     inquirer.prompt(deleteDepartment).then((answer) => {
       db.delete_department_query(answer).then((results) => {
+        console.log("\n", results, "\n");
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+//-----Delete Role-----//
+const delete_role = () => {
+  db.get_roles().then((results) => {
+    // get all roles
+    const deleteRoleQuestion = deleteRole[0];
+    //add all roles to the roles question
+    results.forEach((role) => {
+      deleteRoleQuestion.choices.push({
+        value: role.id,
+        name: role.title,
+      });
+    });
+    //run delete role questions and delete the role
+    inquirer.prompt(deleteRole).then((answer) => {
+      db.delete_role_query(answer).then((results) => {
         console.log("\n", results, "\n");
         //call menu questions
         runMenuQuestions();

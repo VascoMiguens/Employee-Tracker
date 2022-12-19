@@ -9,7 +9,7 @@ INSERT INTO role (id, title, department_id, salary) VALUES (3, "Lead Engineer", 
 INSERT INTO role (id, title, department_id, salary) VALUES (4, "Software Engineer", 2 , 120000);
 INSERT INTO role (id, title, department_id, salary) VALUES (5, "Account Manager", 3 , 160000);
 INSERT INTO role (id, title, department_id, salary) VALUES (6, "Accountant", 3 , 125000);
-INSERT INTO role (id, title, department_id, salary) VALUES (7, "Leal Team Lead", 4 , 250000);
+INSERT INTO role (id, title, department_id, salary) VALUES (7, "Legal Team Lead", 4 , 250000);
 INSERT INTO role (id, title, department_id, salary) VALUES (8, "Lawyer", 4 , 190000);
 
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES (1, "John", "Doe", 1, Null);
