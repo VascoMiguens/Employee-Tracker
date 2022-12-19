@@ -106,14 +106,13 @@ class employeeDB extends DB {
       salary: role.role_salary,
       department_id: role.department_id,
     };
-
     return new Promise((resolve, reject) => {
       //Insert new role into the database
       this.db.query(`INSERT INTO role SET ?`, newRole, (err, result) => {
         if (err) {
           reject(err);
         }
-        resolve(`The new role ${role.title} was added successfully`);
+        resolve(`The new role ${role.role_name} was added successfully`);
       });
     });
   }

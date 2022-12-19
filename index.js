@@ -190,9 +190,8 @@ const update_employee_role = () => {
   // get all  employees and add them into employee question
   db.get_employees().then((results) => {
     const employeeQuestion = updateEmployeeRoleQuestions[0];
-    let employeeName;
     results.forEach((employee) => {
-      employeeName = employee.name;
+      const employeeName = employee.name;
       employeeQuestion.choices.push({
         value: employee.id,
         name: employeeName,
@@ -211,7 +210,7 @@ const update_employee_role = () => {
       inquirer.prompt(updateEmployeeRoleQuestions).then((response) => {
         db.update_employe_role_query(response).then((results) => {
           console.log("\n", results, "\n");
-          console.log(`${employeeName} role updated successfully`);
+          console.log(`Employee's Role updated successfully`);
           //call menu questions
           runMenuQuestions();
         });
@@ -225,10 +224,9 @@ const update_employee_manager = () => {
   db.get_employees().then((results) => {
     const employeeQuestion = updateEmployeeManagerQuestions[0];
     const managerQuestion = updateEmployeeManagerQuestions[1];
-    let employeeDetails;
     //add all employees to the employee and manager questions
     results.forEach((employee) => {
-      employeeDetails = `${employee.name} (${employee.title})`;
+      const employeeDetails = `${employee.name} (${employee.title})`;
       employeeQuestion.choices.push({
         value: employee.id,
         name: employeeDetails,
@@ -246,7 +244,7 @@ const update_employee_manager = () => {
     //run update employee manager questions and update the manager
     inquirer.prompt(updateEmployeeManagerQuestions).then((answer) => {
       db.update_employee_manager_query(answer).then((results) => {
-        console.log(`${employeeDetails} manager was updated!`);
+        console.log(`Employee's manager was updated successfully!`);
         //call menu questions
         runMenuQuestions();
       });
@@ -303,20 +301,18 @@ const delete_department = () => {
   // get all departments
   db.get_departments().then((results) => {
     const deleteDepartmentQuestion = deleteDepartment[0];
-    let departmentName;
     //add all departments to the department question
     results.forEach((department) => {
-      departmentName = department.name;
       deleteDepartmentQuestion.choices.push({
         value: department.id,
-        name: departmentName,
+        name: department.name,
       });
     });
     //run delete department questions and delete the department
     inquirer.prompt(deleteDepartment).then((answer) => {
       db.delete_department_query(answer).then((results) => {
         console.log("\n", results, "\n");
-        console.log(`${departmentName} Department deleted successfully`);
+        console.log(`Department deleted successfully`);
         //call menu questions
         runMenuQuestions();
       });
@@ -328,19 +324,17 @@ const delete_role = () => {
   db.get_roles().then((results) => {
     // get all roles
     const deleteRoleQuestion = deleteRole[0];
-    let roleTitle;
     //add all roles to the roles question
     results.forEach((role) => {
-      roleTitle = role.title;
       deleteRoleQuestion.choices.push({
         value: role.id,
-        name: roleTitle,
+        name: role.title,
       });
     });
     //run delete role questions and delete the role
     inquirer.prompt(deleteRole).then((answer) => {
       db.delete_role_query(answer).then((results) => {
-        console.log(`Role ${roleTitle} deleted successfully`);
+        console.log(`Role deleted successfully`);
         //call menu questions
         runMenuQuestions();
       });
@@ -399,18 +393,18 @@ const update_role_salary = () => {
   //get all roles
   db.get_roles().then((results) => {
     const roleSalaryQuestion = updateRoleSalary[0];
-    //add all roles to update role salary question
-    let roleTitle;
+    //add all roles to update role salary questio
     results.forEach((role) => {
-      roleTitle = role.title;
       roleSalaryQuestion.choices.push({
         value: role.id,
-        name: roleTitle,
+        name: role.title,
       });
     });
     inquirer.prompt(updateRoleSalary).then((answer) => {
       db.update_role_salary_query(answer).then((results) => {
-        console.log(`${roleTitle} salary updated successfully`);
+        console.log(`Role salary updated successfully`);
+        //call menu questions
+        runMenuQuestions();
       });
     });
   });
