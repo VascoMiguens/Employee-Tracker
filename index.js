@@ -9,6 +9,7 @@ const {
   updateEmployeeManagerQuestions,
   employeebyManager,
   employeebyDepartment,
+  deleteDepartment,
 } = require("./questions");
 const employeeDB = require("./db/employeeDB.js");
 const { response } = require("express");
@@ -56,6 +57,9 @@ const runMenuQuestions = async () => {
         break;
       case "view_employee_department":
         view_employee_department();
+        break;
+      case "delete_department":
+        delete_department();
         break;
       default:
         console.log("default");
@@ -265,6 +269,25 @@ const view_employee_department = () => {
     inquirer.prompt(employeebyDepartment).then((answer) => {
       db.get_employee_by_department(answer).then((results) => {
         console.table(results);
+        //call menu questions
+        runMenuQuestions();
+      });
+    });
+  });
+};
+//-----Delete Department ------//
+const delete_department = () => {
+  db.get_departments().then((results) => {
+    const deleteDepartmentQuestions = deleteDepartment[0];
+    results.forEach((department) => {
+      deleteDepartmentQuestions.choices.push({
+        value: department.id,
+        name: department.name,
+      });
+    });
+    inquirer.prompt(deleteDepartment).then((answer) => {
+      db.delete_department_query(answer).then((results) => {
+        console.log("\n", results, "\n");
         //call menu questions
         runMenuQuestions();
       });

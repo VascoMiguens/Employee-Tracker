@@ -211,6 +211,21 @@ class employeeDB extends DB {
       );
     });
   }
+
+  delete_department_query(department) {
+    console.log(department);
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `DELETE from department WHERE id = ${department.department_id}`,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  }
 }
 
 module.exports = employeeDB;

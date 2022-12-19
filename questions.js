@@ -62,6 +62,10 @@ const MainMenuQuestions = [
         value: "view_employee_department",
         name: "View Employee's by Department",
       },
+      {
+        value: "delete_department",
+        name: "DELETE Department",
+      },
     ],
   },
 ];
@@ -171,6 +175,15 @@ const employeebyDepartment = [
   },
 ];
 
+const deleteDepartment = [
+  {
+    type: "list",
+    name: "department_id",
+    message: "Which Department would you like to DELETE?",
+    choices: [],
+  },
+];
+
 module.exports = {
   MainMenuQuestions,
   departmentQuestions,
@@ -180,4 +193,5 @@ module.exports = {
   updateEmployeeManagerQuestions,
   employeebyManager,
   employeebyDepartment,
+  deleteDepartment,
 };
